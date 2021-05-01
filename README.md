@@ -1,4 +1,5 @@
 # Caregiver App Typescript Server
 
 ## Sources
-[Setup Instructions](https://ultimatecourses.com/blog/setup-typescript-nodejs-express)
+[3rd Party Setup Instructions](https://ultimatecourses.com/blog/setup-typescript-nodejs-express)
+[The Gospel According to Microsoft](https://github.com/microsoft/TypeScript-Node-Starter/blob/master/README.md)
