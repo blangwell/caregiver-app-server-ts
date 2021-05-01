@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
+import { ClientDocument, clientSchema } from './Client';
 
 export type UserDocument = mongoose.Document & {
   email: string;
   password: string;
   username: string;
+  clients: ClientDocument[];
 };
 
 const userSchema = new mongoose.Schema<UserDocument>({
@@ -12,7 +14,8 @@ const userSchema = new mongoose.Schema<UserDocument>({
     unique: true,
   },
   password: String,
-  username: String
-});
+  username: String,
+  clients: [clientSchema]
+}, { timestamps: true });
 
 export const User = mongoose.model<UserDocument>('User', userSchema);

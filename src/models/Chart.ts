@@ -34,7 +34,7 @@ export type MobilityDocument = mongoose.Document & {
   ambulate: boolean;
   walker: boolean;
   wheelchair: boolean;
-}
+};
 
 export type ToiletingDocument = mongoose.Document & {
   incontinent: boolean;
@@ -47,7 +47,7 @@ export type ToiletingDocument = mongoose.Document & {
   notes: string;
 };
 
-const chartSchema = new mongoose.Schema<ChartDocument>({
+export const chartSchema = new mongoose.Schema<ChartDocument>({
   date: {
     type: String,
     required: true
@@ -89,4 +89,4 @@ const chartSchema = new mongoose.Schema<ChartDocument>({
   notes: String,
 }, { timestamps: true });
 
-export const Chart = mongoose.model<ChartDocument>('Chart', chartSchema);
+// export const Chart = mongoose.model<ChartDocument>('Chart', chartSchema);

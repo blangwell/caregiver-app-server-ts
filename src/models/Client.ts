@@ -1,23 +1,23 @@
 import mongoose from 'mongoose';
+import { ChartDocument, chartSchema } from "./Chart";
 
 export type ClientDocument = mongoose.Document & {
   initials: string;
   dob: Date;
   allergies: AllergyList[];
-  // charts: [Chart.schema]
+  charts: ChartDocument[];
 };
 
 export type AllergyList = {
   name: string
 };
 
-const clientSchema = new mongoose.Schema<ClientDocument>({
+export const clientSchema = new mongoose.Schema<ClientDocument>({
   initials: {
     type: String,
     unique: true
   },
   dob: Date,
-  allergies: Array
+  allergies: Array,
+  charts: [chartSchema]
 });
-
-export const Client = mongoose.model<ClientDocument>('Client', clientSchema);
