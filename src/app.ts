@@ -13,13 +13,21 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post('/charts/new', chartController.postChart);
-app.put('/charts/:id', chartController.putChart);
-app.delete('/charts/:id', chartController.deleteChart);
+// clients
+app.get('user/:userId/clients', clientController.getAllClients);
+app.get('user/:userId/clients/:clientId', clientController.getClient);
 app.post('/clients/new', clientController.postClient);
-app.put('/clients/:id', clientController.putClient);
-app.delete('/clients/:id', clientController.deleteClient);
+app.put('user/:userId/clients/:clientId', clientController.putClient);
+app.delete('user/:userId/clients/:clientId', clientController.deleteClient);
 
+// client charts
+app.get('user/:userId/clients/:clientId/charts/', chartController.getAllCharts);
+app.get('user/:userId/clients/:clientId/charts/:chartId', chartController.getChart);
+app.post('user/:userId/clients/:clientId/charts/new', chartController.postChart);
+app.put('user/:userId/clients/:clientId/charts/:chartId', chartController.putChart);
+app.delete('user/:userId/clients/:clientId/charts/:chartId', chartController.deleteChart);
+
+// auth
 app.post('/login', authController.postLogin);
 app.post('/signup', authController.postSignup);
 
