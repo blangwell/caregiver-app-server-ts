@@ -89,12 +89,4 @@ const chartSchema = new mongoose.Schema<ChartDocument>({
   notes: String,
 }, { timestamps: true });
 
-const FoodWaterSchema = new mongoose.Schema<FoodWaterDocument>({
-  fluidIntake: Number,
-  breakfast: Boolean,
-  lunch: Boolean,
-  dinner: Boolean,
-  notes: String
-});
-
 export const Chart = mongoose.model<ChartDocument>('Chart', chartSchema);
