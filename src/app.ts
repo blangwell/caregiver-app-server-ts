@@ -3,9 +3,9 @@ import "./models";
 import express, { Express } from 'express';
 import helmet from 'helmet';
 
-import * as userController from './controllers/user';
+import * as authController from './controllers/auth';
 import * as chartController from './controllers/chart';
-import * as homeController from './controllers/home';
+import * as clientController from './controllers/client';
 
 const app: Express = express();
 
@@ -13,13 +13,14 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', homeController.getIndex);
-app.get('/about', homeController.getAbout);
-app.get('/chart/new', chartController.getNewChart);
-app.post('/chart/new', chartController.postNewChart);
-app.get('/login', userController.getLogin);
-app.post('/login', userController.postLogin);
-app.get('/signup', userController.getSignup);
-app.post('/signup', userController.postSignup);
+app.post('/charts/new', chartController.postChart);
+app.put('/charts/:id', chartController.putChart);
+app.delete('/charts/:id', chartController.deleteChart);
+app.post('/clients/new', clientController.postClient);
+app.put('/clients/:id', clientController.putClient);
+app.delete('/clients/:id', clientController.deleteClient);
+
+app.post('/login', authController.postLogin);
+app.post('/signup', authController.postSignup);
 
 export default app;

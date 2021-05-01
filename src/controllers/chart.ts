@@ -1,9 +1,13 @@
 import { Request, Response } from 'express';
 
-export const getNewChart = (req: Request, res: Response) => {
-  res.send("<h1>New Chart</h1>");
-};
-
-export const postNewChart = (req: Request, res: Response) => {
+export const postChart = (req: Request, res: Response) => {
   res.send("📨 POST New Chart");
 };
+
+export const putChart = (req: Request, res: Response) => {
+  res.send("📨 PUT Existing Chart");
+};
+
+export const deleteChart = (req: Request, res: Response) => {
+  res.send("💣 DELETE Existing Chart");
+}
