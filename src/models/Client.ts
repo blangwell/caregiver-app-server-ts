@@ -14,8 +14,7 @@ export type AllergyList = {
 
 export const clientSchema = new mongoose.Schema<ClientDocument>({
   initials: {
-    type: String,
-    unique: true
+    type: String
   },
   dob: Date,
   allergies: Array,
