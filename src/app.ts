@@ -2,16 +2,20 @@ import "./lib/env";
 import "./models";
 import express, { Express } from 'express';
 import helmet from 'helmet';
+import passport from 'passport';
 
-import * as authController from './controllers/auth';
+import * as userController from './controllers/user';
 import * as chartController from './controllers/chart';
 import * as clientController from './controllers/client';
+
+import './config/passport';
 
 const app: Express = express();
 
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
 
 // clients
 app.get('user/:userId/clients', clientController.getAllClients);
@@ -28,7 +32,7 @@ app.put('user/:userId/clients/:clientId/charts/:chartId', chartController.putCha
 app.delete('user/:userId/clients/:clientId/charts/:chartId', chartController.deleteChart);
 
 // auth
-app.post('/login', authController.postLogin);
-app.post('/signup', authController.postSignup);
+app.post('/login', userController.postLogin);
+app.post('/signup', userController.postSignup);
 
 export default app;
