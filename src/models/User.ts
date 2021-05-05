@@ -35,6 +35,7 @@ const userSchema = new mongoose.Schema<UserDocument>({
 // Middleware to hash passwords
 userSchema.pre('save', function save(next) {
   const user = this as UserDocument;
+  // only hash passwords if modified or new
   if (!user.isModified('password')) return next();
   const saltRounds = 10;
   const password = user.password;
