@@ -1,9 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { User, UserDocument } from '../models/User';
 import { CallbackError, NativeError } from 'mongoose';
-import { check, sanitize, validationResult } from "express-validator";
+import { check, validationResult } from "express-validator";
 import { IVerifyOptions } from 'passport-local';
 import passport from 'passport';
+import { createUserToken } from '../middleware/auth';
+import bcrypt from 'bcrypt';
+
 
 export const postLogin = async (req: Request, res: Response, next: NextFunction) => {
   await check("email", "Email is not valid").isEmail().run(req);
@@ -17,16 +20,16 @@ export const postLogin = async (req: Request, res: Response, next: NextFunction)
     return res.json(errors);
   }
 
-  passport.authenticate("local", (err: Error, user: UserDocument, info: IVerifyOptions) => {
+  User.findOne({ email: req.body.email }, async (err: NativeError, foundUser: UserDocument) => {
     if (err) return next(err);
-    if (!user) {
-      return res.send(info.message);
-    }
-    req.login(user, err => {
-      if (err) return next(err);
-      return res.send("Successfully logged in!")
+    if (!foundUser) return res.status(400).send('No user found with that email!');
+    const matchPasswords = await bcrypt.compare(req.body.password, foundUser.password);
+    if (!matchPasswords) return res.status(400).send('Password is incorrect!');
+    res.json({
+      msg: 'Authenicated successfully!',
+      token: createUserToken(req, foundUser)
     });
-  })(req, res, next);
+  })
 };
 
 export const postSignup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -37,12 +40,10 @@ export const postSignup = async (req: Request, res: Response, next: NextFunction
   
   // extract validation errors to Result object
   const errors = validationResult(req);
-  
   if (!errors.isEmpty()) { // if there are errors
     // flash message here? 
     res.json(errors);
   }
-
   const user = new User({
     email: req.body.email,
     password: req.body.password
@@ -51,14 +52,18 @@ export const postSignup = async (req: Request, res: Response, next: NextFunction
   User.findOne({ email: req.body.email }, (err: NativeError, existingUser: UserDocument) => {
     if (err) return next(err);
     if (existingUser) {
-      res.send("User already exists");
+      return res.send("User already exists");
     }
     user.save(err => {
       if (err) return next(err);
       req.login(user, err => {
         if (err) return next(err);
-      })
-      res.send("user created and logged in successfully!");
+      });
+      res.json({
+        msg: "user created and logged in successfully!",
+        token: createUserToken(req, user),
+        user: user
+      });
       
     })
   });
